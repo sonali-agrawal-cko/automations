@@ -26,4 +26,4 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SCHEDULE_ID: ${{ secrets.PD_SCHEDULE_ID }}
         run: |
-          python scripts/post_oncall.py
+          python scripts/post-oncall-schedule.py
