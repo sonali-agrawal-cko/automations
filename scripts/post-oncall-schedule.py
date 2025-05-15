@@ -22,7 +22,10 @@ response.raise_for_status()
 oncalls = response.json().get('oncalls', [])
 
 # Filter oncalls by exact schedule ID (double-safety)
-filtered_oncalls = [o for o in oncalls if o.get('schedule', {}).get('id') == PD_SCHEDULE_ID]
+filtered_oncalls = [
+    o for o in oncalls
+    if o.get('schedule') and o['schedule'].get('id') == PD_SCHEDULE_ID
+]
 
 # Collect user names
 user_names = ', '.join(set(o['user']['summary'] for o in filtered_oncalls)) or "No one found 🫠"
