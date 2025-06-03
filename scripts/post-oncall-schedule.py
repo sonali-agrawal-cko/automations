@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 
 PD_API_KEY = os.getenv('PD_API_KEY')
 PD_SCHEDULE_ID = os.getenv('PD_SCHEDULE_ID')
@@ -21,11 +22,20 @@ response.raise_for_status()
 
 oncalls = response.json().get('oncalls', [])
 
+# Debug logging
+print(f"Raw response: {json.dumps(response.json(), indent=2)}")
+print(f"Number of oncalls found: {len(oncalls)}")
+print(f"Schedule ID we're looking for: {PD_SCHEDULE_ID}")
+
 # Filter oncalls by exact schedule ID (double-safety)
 filtered_oncalls = [
     o for o in oncalls
     if o.get('schedule') and o['schedule'].get('id') == PD_SCHEDULE_ID
 ]
+
+print(f"Number of filtered oncalls: {len(filtered_oncalls)}")
+if filtered_oncalls:
+    print(f"First filtered oncall: {json.dumps(filtered_oncalls[0], indent=2)}")
 
 # Collect user names
 user_names = ', '.join(set(o['user']['summary'] for o in filtered_oncalls)) or "No one found 🫠"
